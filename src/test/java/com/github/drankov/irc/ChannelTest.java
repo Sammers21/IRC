@@ -5,12 +5,40 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.github.drankov.irc.IRCSever.*;
 import static org.junit.Assert.assertTrue;
 
 public class ChannelTest extends IRCServiceTestBase {
 
     static final String SUCC_ENTERED = "successfully entered";
     static final String MSG = "hello world1";
+
+    @Test
+    public void joinWithoutLogin() throws IOException {
+        testIRCClient.sendLine("/join chat1");
+        assertTrue(testIRCClient.readLine().contains(LOGIN_PLEASE));
+    }
+
+    @Test
+    public void channelSwitching() throws IOException {
+        testIRCClient.sendLine("/login login password");
+        testIRCClient.sendLine("/join chat1");
+        testIRCClient.sendLine("/join chat1");
+        testIRCClient.sendLine("/join chat2");
+        testIRCClient.readLine();
+        assertTrue(testIRCClient.readLine().contains(SUCC_ENTERED));
+        assertTrue(testIRCClient.readLine().contains(SUCC_ENTERED));
+
+        TestIRCClient testIRCClient2 = new TestIRCClient(HOST, PORT);
+        testIRCClient2.sendLine("/login login1 password");
+        testIRCClient2.sendLine("/join chat2");
+        testIRCClient2.readLine();
+        assertTrue(testIRCClient2.readLine().contains(SUCC_ENTERED));
+
+        testIRCClient.sendLine(MSG);
+        assertTrue(testIRCClient2.readLine().contains(MSG));
+        testIRCClient2.close();
+    }
 
     @Test
     public void simpleMessageSentTest() throws IOException {
@@ -86,11 +114,18 @@ public class ChannelTest extends IRCServiceTestBase {
         testIRCClient.readLine();
         assertTrue(testIRCClient.readLine().contains(SUCC_ENTERED));
 
-
         TestIRCClient testIRCClient2 = new TestIRCClient(HOST, PORT);
+
+        testIRCClient2.sendLine("/users");
+        assertTrue(testIRCClient2.readLine().contains(LOGIN_PLEASE));
+
         testIRCClient2.sendLine("/login login1 password");
-        testIRCClient2.sendLine("/join chat1");
         testIRCClient2.readLine();
+
+        testIRCClient2.sendLine("/users");
+        assertTrue(testIRCClient2.readLine().contains(SHOULD_BE_IN_A_CHANNEL_FOR_REQUESTING_LIST_USERS));
+
+        testIRCClient2.sendLine("/join chat1");
         assertTrue(testIRCClient2.readLine().contains(SUCC_ENTERED));
 
         testIRCClient2.sendLine("/users");
