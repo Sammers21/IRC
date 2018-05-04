@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Sammers21/IRC.svg?branch=master)](https://travis-ci.org/Sammers21/IRC)
+
 ### Building
 
 In order to build the jar, execute:
