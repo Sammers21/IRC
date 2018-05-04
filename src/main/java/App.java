@@ -12,11 +12,30 @@ import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
+/**
+ * Entry point of the application.
+ */
 public class App {
 
-    static final int PORT = 16001;
+    static final int DEFAULT_PORT = 16000;
 
     public static void main(String[] args) throws InterruptedException {
+
+        int port = DEFAULT_PORT;
+
+        if (args.length > 1) {
+            System.out.println("Too much arguments");
+            System.exit(-1);
+        } else if (args.length == 1) {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                System.out.println("Specified port should be an int");
+                System.exit(-1);
+            }
+        }
+
+        System.out.println("String an IRC server on port: " + port);
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -40,7 +59,7 @@ public class App {
                         }
                     });
 
-            b.bind(PORT).sync().channel().closeFuture().sync();
+            b.bind(port).sync().channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

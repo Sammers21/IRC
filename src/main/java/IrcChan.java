@@ -5,19 +5,35 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.util.LinkedList;
 
+/**
+ * Represent a channel on the server.
+ */
 public class IrcChan {
+
     private final String name;
     private final int storeLastMessages;
     private final int maxClients;
     private final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final LinkedList<String> lastMessages = new LinkedList();
 
+    /**
+     * Construct a new channel.
+     *
+     * @param name              channel name
+     * @param storeLastMessages how many last messages should be stored
+     * @param maxClients        how many clients can be in the channel at the same time
+     */
     public IrcChan(String name, int storeLastMessages, int maxClients) {
         this.name = name;
         this.storeLastMessages = storeLastMessages;
         this.maxClients = maxClients;
     }
 
+    /**
+     * Add the users to the channel.
+     *
+     * @param user user to add
+     */
     public void addUser(User user) {
         IrcChan ircChan = user.ircChan();
         Channel userChannel = user.channel();
@@ -46,6 +62,12 @@ public class IrcChan {
         }
     }
 
+    /**
+     * Post the message to the channel.
+     *
+     * @param message message to post
+     * @param user    message sender
+     */
     public void postNewMessageFromUser(String message, User user) {
         String msgToPost = String.format("[%s]: %s%s", user.login(), message, IRCSever.DELIM);
         synchronized (lastMessages) {
@@ -57,10 +79,16 @@ public class IrcChan {
         channels.writeAndFlush(msgToPost, channel -> channel != user.channel());
     }
 
+    /**
+     * @return channel name
+     */
     public String name() {
         return name;
     }
 
+    /**
+     * @return current connections
+     */
     public ChannelGroup channels() {
         return channels;
     }

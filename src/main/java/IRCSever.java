@@ -4,6 +4,9 @@ import io.netty.channel.ChannelId;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Represents a server. The list of channels and users are stored there.
+ */
 public class IRCSever {
 
     public static String DELIM = "\r\n";
@@ -21,6 +24,12 @@ public class IRCSever {
     private ConcurrentHashMap<ChannelId, User> channelAndUser = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, IrcChan> ircChannels = new ConcurrentHashMap<>();
 
+    /**
+     * Handle message received from the client.
+     *
+     * @param ctx     associated netty context
+     * @param message message to send
+     */
     void handleInComingMessage(ChannelHandlerContext ctx, String message) {
         User user = channelAndUser.get(ctx.channel().id());
         if (user != null) {
@@ -34,6 +43,11 @@ public class IRCSever {
         }
     }
 
+    /**
+     * Handle user list request.
+     *
+     * @param ctx associated netty context
+     */
     void handleUsers(ChannelHandlerContext ctx) {
         User user = channelAndUser.get(ctx.channel().id());
         if (user != null) {
@@ -54,6 +68,12 @@ public class IRCSever {
         }
     }
 
+    /**
+     * Handle channel joining.
+     *
+     * @param ctx         associated netty context
+     * @param channelName channel to join
+     */
     void handleJoin(ChannelHandlerContext ctx, String channelName) {
         User user = channelAndUser.get(ctx.channel().id());
         if (user != null) {
@@ -64,6 +84,13 @@ public class IRCSever {
         }
     }
 
+    /**
+     * Handle user authorization.
+     *
+     * @param ctx      associated netty context
+     * @param login    the user login
+     * @param password the user password
+     */
     void handleLogin(ChannelHandlerContext ctx, String login, String password) {
         User previous = loginAndUser.putIfAbsent(login, new User(login, password));
         // User is exist

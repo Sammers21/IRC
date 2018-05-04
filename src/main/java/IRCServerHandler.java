@@ -4,6 +4,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Handler embedded into the netty pipeline.
+ */
 public class IRCServerHandler extends SimpleChannelInboundHandler<String> {
 
     private static final Pattern LOGIN_COMMAND = Pattern.compile("^/login (\\w+) (\\w+)$");
@@ -12,12 +15,13 @@ public class IRCServerHandler extends SimpleChannelInboundHandler<String> {
     private static final Pattern USERS_COMMAND = Pattern.compile("^/users$");
     private final IRCSever ircSever;
 
+    /**
+     * Construct a new handler, which delegates all user events to the given {@link IRCSever} instance
+     *
+     * @param ircSever the server to delegate all events
+     */
     IRCServerHandler(IRCSever ircSever) {
         this.ircSever = ircSever;
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
     }
 
     @Override
