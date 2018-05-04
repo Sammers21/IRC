@@ -1,10 +1,10 @@
-###Building
+### Building
 
 In order to build the jar execute:
 ```bash
 ./gradlew jar
 ```
-###Running
+### Running
 In order to run the server execute:
 ```bash
 java -jar ./build/libs/IRC.jar 8000
