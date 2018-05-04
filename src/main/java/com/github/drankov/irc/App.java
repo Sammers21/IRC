@@ -1,4 +1,4 @@
-package com.github.drankov.irc;/*
+/*
  * Copyright 2018 Drankov Pavel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,7 @@ package com.github.drankov.irc;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.drankov.irc;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
