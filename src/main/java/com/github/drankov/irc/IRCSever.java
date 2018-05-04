@@ -1,4 +1,4 @@
-/*
+package com.github.drankov.irc;/*
  * Copyright 2018 Drankov Pavel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,14 +27,12 @@ public class IRCSever {
 
     public static String DELIM = "\r\n";
 
-    private static final String LOGIN_PLEASE = "Before sending a message you should be authorized";
-    private static final String JOIN_A_CHANNEL_PLEASE = "Before sending a message you should join a channel";
-    private static final String SHOULD_BE_IN_A_CHANNEL_FOR_REQUESTING_LIST_USERS = "In order to get the user list you should join a channel";
-    private static final String INVALID_PASSWORD = "Invalid password";
-    private static final String ALREADY_AUTHORIZED = "You already authorized on another device";
-
-    private static final int ALLOWED_CLIENTS_IN_ONE_CHANNEL = 2;
-    private static final int LAST_MESSAGES_STORED = 10;
+    public static final String LOGIN_PLEASE = "Before sending a message you should be authorized";
+    public static final String JOIN_A_CHANNEL_PLEASE = "Before sending a message you should join a channel";
+    public static final String SHOULD_BE_IN_A_CHANNEL_FOR_REQUESTING_LIST_USERS = "In order to get the user list you should join a channel";
+    public static final String INVALID_PASSWORD = "Invalid password";
+    public static final String ALREADY_AUTHORIZED = "You already authorized on another device";
+    public static final String SUCCESS_AUTH = "You have authorized successfully";
 
     private ConcurrentHashMap<String, User> loginAndUser = new ConcurrentHashMap<>();
     private ConcurrentHashMap<ChannelId, User> channelAndUser = new ConcurrentHashMap<>();
@@ -93,7 +91,7 @@ public class IRCSever {
     void handleJoin(ChannelHandlerContext ctx, String channelName) {
         User user = channelAndUser.get(ctx.channel().id());
         if (user != null) {
-            IrcChan ircChan = ircChannels.computeIfAbsent(channelName, s -> new IrcChan(s, LAST_MESSAGES_STORED, ALLOWED_CLIENTS_IN_ONE_CHANNEL));
+            IrcChan ircChan = ircChannels.computeIfAbsent(channelName, s -> new IrcChan(s, App.DEFAULT_LAST_MESSAGES_STORED, App.DEFAULT_ALLOWED_CLIENTS_IN_ONE_CHANNEL));
             ircChan.addUser(user);
         } else {
             ctx.writeAndFlush(LOGIN_PLEASE + DELIM);
@@ -128,12 +126,14 @@ public class IRCSever {
         Channel channel = ctx.channel();
         synchronized (user) {
             if (user.channel() != null && user.channel() != ctx.channel()) {
-                ctx.writeAndFlush(ALREADY_AUTHORIZED);
+                ctx.writeAndFlush(ALREADY_AUTHORIZED + DELIM);
                 return;
             }
             user.setChannel(channel);
             channelAndUser.put(channel.id(), user);
         }
+
+        ctx.writeAndFlush(SUCCESS_AUTH + DELIM);
 
         // disable login session on disconnect
         channel.closeFuture().addListener(v -> {

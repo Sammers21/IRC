@@ -1,4 +1,4 @@
-/*
+package com.github.drankov.irc;/*
  * Copyright 2018 Drankov Pavel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,4 +1,4 @@
-/*
+package com.github.drankov.irc;/*
  * Copyright 2018 Drankov Pavel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,6 +45,7 @@ public class IRCServerHandler extends SimpleChannelInboundHandler<String> {
         String reqWithTrim = request.trim();
         Matcher leave = LEAVE_COMMAND.matcher(reqWithTrim);
         if (leave.matches()) {
+            ctx.disconnect();
             ctx.close();
             return;
         }
@@ -75,7 +76,6 @@ public class IRCServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
         ctx.close();
     }
 }
