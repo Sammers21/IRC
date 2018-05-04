@@ -17,7 +17,7 @@ import io.netty.handler.logging.LoggingHandler;
  */
 public class App {
 
-    static final int DEFAULT_PORT = 16000;
+    static final int DEFAULT_PORT = 23;
 
     public static void main(String[] args) throws InterruptedException {
 
