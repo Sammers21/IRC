@@ -14,6 +14,12 @@ public class ChannelTest extends IRCServiceTestBase {
     static final String MSG = "hello world1";
 
     @Test
+    public void joinWithoutLogin() throws IOException {
+        testIRCClient.sendLine("/join chat1");
+        assertTrue(testIRCClient.readLine().contains(LOGIN_PLEASE));
+    }
+
+    @Test
     public void channelSwitching() throws IOException {
         testIRCClient.sendLine("/login login password");
         testIRCClient.sendLine("/join chat1");
