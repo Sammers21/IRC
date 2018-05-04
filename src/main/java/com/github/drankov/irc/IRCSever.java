@@ -27,7 +27,7 @@ public class IRCSever {
 
     public static String DELIM = "\r\n";
 
-    public static final String LOGIN_PLEASE = "Before sending a message you should be authorized";
+    public static final String LOGIN_PLEASE = "Before doing this you should be authorized";
     public static final String JOIN_A_CHANNEL_PLEASE = "Before sending a message you should join a channel";
     public static final String SHOULD_BE_IN_A_CHANNEL_FOR_REQUESTING_LIST_USERS = "In order to get the user list you should join a channel";
     public static final String INVALID_PASSWORD = "Invalid password";
