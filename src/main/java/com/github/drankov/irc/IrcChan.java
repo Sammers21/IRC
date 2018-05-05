@@ -89,9 +89,9 @@ public class IrcChan {
         String msgToPost = String.format("[%s]: %s%s", user.login(), message, IRCSever.DELIM);
         synchronized (lastMessages) {
             if (lastMessages.size() + 1 > storeLastMessages) {
-                lastMessages.removeLast();
+                lastMessages.removeFirst();
             }
-            lastMessages.addFirst(msgToPost);
+            lastMessages.addLast(msgToPost);
         }
         channels.writeAndFlush(msgToPost, channel -> channel != user.channel());
     }
