@@ -36,8 +36,8 @@ import io.netty.handler.logging.LoggingHandler;
 public class App {
 
     static final int DEFAULT_PORT = 23;
-    static final int DEFAULT_ALLOWED_CLIENTS_IN_ONE_CHANNEL = 10;
-    static final int DEFAULT_LAST_MESSAGES_STORED = 10;
+    static final int DEFAULT_ALLOWED_CLIENTS_IN_ONE_CHANNEL = 1000;
+    static final int DEFAULT_LAST_MESSAGES_STORED = 100000;
 
     public static void main(String[] args) throws InterruptedException {
         int port = DEFAULT_PORT;
