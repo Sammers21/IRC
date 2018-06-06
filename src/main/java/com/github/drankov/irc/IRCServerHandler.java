@@ -21,6 +21,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.github.drankov.irc.IRCSever.DELIM;
+
 /**
  * Handler embedded into the netty pipeline.
  */
@@ -72,17 +74,17 @@ public class IRCServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.write("You have just entered the Pavel Drankov IRC server!");
-        ctx.write("The server is a open source project");
-        ctx.write("Check out the github page: https://github.com/Sammers21/IRC");
-        ctx.write("Command list:");
-        ctx.write("Command set for this server:");
-        ctx.write("\t/login name password — if user not exists create profile else login");
-        ctx.write("\t/join channel — try to join channel (max 1000 active clients per channel is allowed). ");
-        ctx.write("\t\tIf client’s limit exceeded - error is send, otherwise join channel and send last 100000 messages of activity.");
-        ctx.write("\t\tIf room not exits - it is created first then try to join.");
-        ctx.write("\t/leave - disconnect client");
-        ctx.write("\t/users — show users in the channel");
+        ctx.write("You have just entered the Pavel Drankov IRC server!" + DELIM);
+        ctx.write("The server is a open source project" + DELIM);
+        ctx.write("Check out the github page: https://github.com/Sammers21/IRC" + DELIM);
+        ctx.write("Command list:" + DELIM);
+        ctx.write("Command set for this server:" + DELIM);
+        ctx.write("\t/login name password — if user not exists create profile else login" + DELIM);
+        ctx.write("\t/join channel — try to join channel (max 1000 active clients per channel is allowed). " + DELIM);
+        ctx.write("\t\tIf client’s limit exceeded - error is send, otherwise join channel and send last 100000 messages of activity." + DELIM);
+        ctx.write("\t\tIf room not exits - it is created first then try to join." + DELIM);
+        ctx.write("\t/leave - disconnect client" + DELIM);
+        ctx.write("\t/users — show users in the channel" + DELIM);
         ctx.flush();
     }
 

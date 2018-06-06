@@ -33,7 +33,10 @@ public class TestIRCClient implements Closeable {
         socket.setKeepAlive(true);
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         writer = new PrintWriter(socket.getOutputStream(), true);
-
+        for (int i = 0; i < 11; i++) {
+            String readLine = this.readLine();
+            System.out.println(readLine);
+        }
     }
 
     public void sendLine(String line) {
